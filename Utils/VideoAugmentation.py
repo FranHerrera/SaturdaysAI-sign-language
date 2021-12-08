@@ -2,6 +2,7 @@
 import cv2
 import imutils
 import numpy as np
+import os
 
 ######################## Horizontal Flip ########################
 def horizontal_flip(path, name):
@@ -129,15 +130,14 @@ def video_resize(path, name, scale_percent):
     '''
     # The video is captured
     cap = cv2.VideoCapture(path)
-    print(cap)
     # Width and height of the video is taken
     width  = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    # The format of the new video is created
-    output = cv2.VideoWriter(name +'.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (width,height))
     # Calculate new width and new height
     new_width  = int(width + width*scale_percent)
     new_height = int(height + height*scale_percent)   
+    # The format of the new video is created
+    output = cv2.VideoWriter(name +'.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (new_width, new_height)) 
     # Read the video
     while cap.isOpened():
         # Read the frame
@@ -147,7 +147,6 @@ def video_resize(path, name, scale_percent):
             frame = cv2.resize(frame, (new_width, new_height), interpolation = cv2.INTER_AREA)
             # Add image to output
             output.write(frame)
-
         else:
             break
 
@@ -190,3 +189,22 @@ def video_gausian_blur(path, name, kernel_size):
     cap.release()
     output.release()
 
+
+
+path = '../1 - Dataset/Words/'
+words = [words for words in os.listdir(path) if os.path.isdir(os.path.join(path, words))]
+
+for word in words:
+    word_path = os.path.join(path,word)
+    for video in os.listdir(os.path.join(path, word)):
+        video_path = os.path.join(word_path,video)
+        # Horizontal Flip
+        horizontal_flip(video_path,video_path.replace(".mp4","-flip"))
+        # Rotate 10 degrees
+        video_rotation(video_path,video_path.replace(".mp4","-rotate"),10)
+        # Translation x+100, y+200
+        video_translation(video_path,video_path.replace(".mp4","-translation"), 70, 50)
+        # Increase 10%
+        video_resize(video_path,video_path.replace(".mp4","-resize"), 0.1)
+        # Gaussian Blur 20
+        video_gausian_blur(video_path,video_path.replace(".mp4","-blur"), 20)
