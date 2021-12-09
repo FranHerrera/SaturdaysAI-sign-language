@@ -189,22 +189,35 @@ def video_gausian_blur(path, name, kernel_size):
     cap.release()
     output.release()
 
+######################## Video Augmentation ########################
+def video_augmentation(path):
+    '''
+        video_augmentation(path)
+        
+        This function takes each video found on the given path and performs different techniques of video augmentation (flipping, rotating, translating, resizing and blurring).
+        
+        Parameters
+        -------------------------------------------------------------------------------------------
+        path:          Path where the videos are
+        
+    '''
+    words = [words for words in os.listdir(path) if os.path.isdir(os.path.join(path, words))]
 
+    for word in words:
+        word_path = os.path.join(path,word)
+        for video in os.listdir(os.path.join(path, word)):
+            video_path = os.path.join(word_path,video)
+            # Horizontal Flip
+            horizontal_flip(video_path,video_path.replace(".mp4","-flip"))
+            # Rotate 10 degrees
+            video_rotation(video_path,video_path.replace(".mp4","-rotate"),10)
+            # Translation x+100, y+200
+            video_translation(video_path,video_path.replace(".mp4","-translation"), 70, 50)
+            # Increase 10%
+            video_resize(video_path,video_path.replace(".mp4","-resize"), 0.1)
+            # Gaussian Blur 20
+            video_gausian_blur(video_path,video_path.replace(".mp4","-blur"), 20)
 
-path = '../1 - Dataset/Words/'
-words = [words for words in os.listdir(path) if os.path.isdir(os.path.join(path, words))]
-
-for word in words:
-    word_path = os.path.join(path,word)
-    for video in os.listdir(os.path.join(path, word)):
-        video_path = os.path.join(word_path,video)
-        # Horizontal Flip
-        horizontal_flip(video_path,video_path.replace(".mp4","-flip"))
-        # Rotate 10 degrees
-        video_rotation(video_path,video_path.replace(".mp4","-rotate"),10)
-        # Translation x+100, y+200
-        video_translation(video_path,video_path.replace(".mp4","-translation"), 70, 50)
-        # Increase 10%
-        video_resize(video_path,video_path.replace(".mp4","-resize"), 0.1)
-        # Gaussian Blur 20
-        video_gausian_blur(video_path,video_path.replace(".mp4","-blur"), 20)
+######################## Example ########################
+# path = '../1 - Dataset/Words/'
+# video_augmentation(path)
