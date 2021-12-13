@@ -5,12 +5,14 @@ import numpy as np
 from pathlib import Path
 import shutil
 import os
+from random import randrange
 import time
+from distutils.dir_util import copy_tree
 
 ######################## Horizontal Flip ########################
-def horizontal_flip(path, new_path):
+def video_flip(path, new_path):
     '''
-        horizontal_flip(path, new_path)
+        video_flip(path, new_path)
         
         This function takes a video, given its path, and performs a horizontal flip of that video.
         
@@ -41,33 +43,6 @@ def horizontal_flip(path, new_path):
 
     cap.release()
     output.release()
-
-def generate_flipped_video(original_video_path, new_directory_path):
-    '''
-        generate_fliped_video(original_video_path, new_directory_path)
-        
-        This function takes the path to a video and the directory where to save the new video and generates a new video by flipping the original.
-        It returns the path to this video.
-        
-        Parameters
-        -------------------------------------------------------------------------------------------
-        original_video_path:    Path to the original video
-        new_directory_path:     Path of the directory whre the new video will save
-
-        Returns
-        -------------------------------------------------------------------------------------------
-        new_video_path:         Path to the new video
-        
-    '''
-     # Generates the name of the fliped video
-    new_name = extract_name(original_video_path,"flip")
-    # Generates the path of the fliped video
-    flipped_video_path = os.path.join(new_directory_path, new_name)
-    # Generates the fliped video
-    horizontal_flip(original_video_path, flipped_video_path)
-    # Return the path to the new video
-    return flipped_video_path
-
 
 ######################## Rotation ########################
 def video_rotation(path, new_path, degree):
@@ -104,33 +79,6 @@ def video_rotation(path, new_path, degree):
 
     cap.release()
     output.release()
-
-def generate_rotated_video(original_video_path, new_directory_path, degrees):
-    '''
-        generate_fliped_video(original_video_path, new_directory_path, degrees)
-        
-        This function takes the path to a video and the directory where to save the new video, and generates a new video by rotating XX degrees the original one. 
-        It returns the path to this video.
-        
-        Parameters
-        -------------------------------------------------------------------------------------------
-        original_video_path:    Path to the original video
-        new_directory_path:     Path of the directory whre the new video will save
-
-        Returns
-        -------------------------------------------------------------------------------------------
-        new_video_path:         Path to the new video
-        
-    '''
-    # Generates the name of the rotated video
-    new_name = extract_name(original_video_path,"rotated"+str(degrees))
-    # Generates the path of the rotated video
-    rotated_video_path = os.path.join(new_directory_path, new_name)
-    # Generates the rotated video
-    video_rotation(original_video_path, rotated_video_path, degrees)
-    # Return the path to the new video
-    return rotated_video_path
-
 
 ######################## Translation ########################
 def video_translation(path, new_path, shift_x, shift_y):
@@ -245,8 +193,9 @@ def video_gausian_blur(path, new_path, kernel_size):
     cap.release()
     output.release()
 
+
 ####################### Rename #######################
-def extract_name(path, transformation):
+def extract_name(word, count, transformation):
     '''
         extract_name(path, transformation)
         
@@ -262,11 +211,17 @@ def extract_name(path, transformation):
         name:            The new name that the video has.
     '''
     # Generates an array with two positions, one for the path and the other for the video name.
-    video_path_split = path.split("\\") # ['../1 - Dataset/Words/Sentir', 'word-sentir-001.mp4']
-    name = video_path_split[1]
-    # Add the transformation and the extension
-    transformation = "-" + transformation + ".avi"
-    name = name.replace(".mp4",transformation)
+    # video_path_split = path.split("\\") # ['../1 - Dataset/Words/Sentir', 'word-sentir-001.mp4']
+    # name = video_path_split[1]
+    # name_array = name.split("-")
+    # # Add the transformation and the extension
+    # transformation = "-" + transformation + ".avi"
+    # name = name.replace(".mp4",transformation)
+    name = word + transformation + str(count) + str(randrange(9999)) + ".avi"
+    return name
+
+def new_name(word, count):
+    name = word + "_" + str(count) + "_" + str(time.time_ns()) + ".avi"
     return name
 
 ######################## Video Augmentation ########################
@@ -283,35 +238,65 @@ def video_augmentation(path):
     '''
     # If it does not exist, a new path is created where the videos will be saved.
     new_path = "../Train_Dataset/"
-    Path(new_path).mkdir(parents=True,exist_ok=True)
-    words = [words for words in os.listdir(path) if os.path.isdir(os.path.join(path, words))]
+    copy_tree(path, new_path)
+    words = [words for words in os.listdir(new_path) if os.path.isdir(os.path.join(new_path, words))]
 
+    # Flip
     for word in words:
-        word_path = os.path.join(path,word)
-        # If it does not exist, a new directory is created for each word
-        new_word_path = os.path.join(new_path,word)
-        Path(new_word_path).mkdir(parents=True,exist_ok=True)
-        for video in os.listdir(os.path.join(path, word)):
-            ## Original video ##
-            original_video_path = os.path.join(word_path,video)
-            # Generates an array with two positions, one for the path and the other for the video name.
-            video_path_split = original_video_path.split("\\") # ['../1 - Dataset/Words/Sentir', 'word-sentir-001.mp4']
-            # Copy the orignal video in the new folder
-            shutil.copyfile(original_video_path, os.path.join(new_word_path,video_path_split[1]))
-            ## Flip video ##
-            flipped_video_path = generate_flipped_video(original_video_path, new_word_path)
-            # ### Rotation +10 degrees. From the original ###
-            # rotated10_video_path = generate_rotated_video(original_video_path, new_word_path, 10)
-            # ### Rotation +10 degrees. From the flipped ###
-            # flipped_rotated10_video_path = generate_rotated_video(flipped_video_path, new_word_path, 10)
-            # ### Rotation -15 degrees. From the original ###
-            # rotated15_video_path = generate_rotated_video(original_video_path, new_word_path, -15)
-            # # ### Rotation -15 degrees. From the flipped ###
-            # # flipped_rotated15_video_path = generate_rotated_video(flipped_video_path, new_word_path, -15)
-            break
-
-
-        
+        for video in os.listdir(os.path.join(new_path, word)):
+            video_path = os.path.join(os.path.join(new_path, word), video)
+            if video_path.endswith(".mp4"):
+                new_video_path = video_path.replace(".mp4","-f" + ".avi")
+            else:
+                new_video_path = video_path.replace(".avi","-f" + ".avi")
+            video_flip(video_path, new_video_path)
+    # Rotation
+    for word in words:
+        for video in os.listdir(os.path.join(new_path, word)):
+            video_path = os.path.join(os.path.join(new_path, word), video)
+            if video_path.endswith(".mp4"):
+                new_video_path_1 = video_path.replace(".mp4","-r10" + ".avi")
+                new_video_path_2 = video_path.replace(".mp4","-r13" + ".avi")
+            else:
+                new_video_path_1 = video_path.replace(".avi","-r10" + ".avi")
+                new_video_path_2 = video_path.replace(".avi","-r13" + ".avi")
+            video_rotation(video_path, new_video_path_1, 10)
+            video_rotation(video_path, new_video_path_2, -13)
+    # Translation
+    for word in words:
+        for video in os.listdir(os.path.join(new_path, word)):
+            video_path = os.path.join(os.path.join(new_path, word), video)
+            if video_path.endswith(".mp4"):
+                new_video_path_1 = video_path.replace(".mp4","-t25" + ".avi")
+                new_video_path_2 = video_path.replace(".mp4","-t30" + ".avi")
+            else:
+                new_video_path_1 = video_path.replace(".avi","-t25" + ".avi")
+                new_video_path_2 = video_path.replace(".avi","-t30" + ".avi")
+            video_translation(video_path, new_video_path_1, 25, 25)
+            video_translation(video_path, new_video_path_2, -30, -30)
+    # Resize
+    for word in words:
+        for video in os.listdir(os.path.join(new_path, word)):
+            video_path = os.path.join(os.path.join(new_path, word), video)
+            if video_path.endswith(".mp4"):
+                new_video_path_1 = video_path.replace(".mp4","-rs10" + ".avi")
+                new_video_path_2 = video_path.replace(".mp4","-rs13" + ".avi")
+            else:
+                new_video_path_1 = video_path.replace(".avi","-rs10" + ".avi")
+                new_video_path_2 = video_path.replace(".avi","-rs13" + ".avi")
+            video_resize(video_path, new_video_path_1, 0.1)
+            video_resize(video_path, new_video_path_2, -0.13)
+    # Blur
+    for word in words:
+        for video in os.listdir(os.path.join(new_path, word)):
+            video_path = os.path.join(os.path.join(new_path, word), video)
+            if video_path.endswith(".mp4"):
+                new_video_path = video_path.replace(".mp4","-b" + ".avi")
+            else:
+                new_video_path = video_path.replace(".avi","-b" + ".avi")
+            video_gausian_blur(video_path, new_video_path, 35)
+            
+                
 
 ######################## Example ########################
 path = "../1 - Dataset/Words/"
