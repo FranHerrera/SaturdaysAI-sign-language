@@ -286,15 +286,15 @@ def video_augmentation(path):
                 new_video_path_2 = video_path.replace(".avi","-rs13" + ".avi")
             video_resize(video_path, new_video_path_1, 0.1)
             video_resize(video_path, new_video_path_2, -0.13)
-    # Blur
-    for word in words:
-        for video in os.listdir(os.path.join(new_path, word)):
-            video_path = os.path.join(os.path.join(new_path, word), video)
-            if video_path.endswith(".mp4"):
-                new_video_path = video_path.replace(".mp4","-b" + ".avi")
-            else:
-                new_video_path = video_path.replace(".avi","-b" + ".avi")
-            video_gausian_blur(video_path, new_video_path, 35)
+    # # Blur
+    # for word in words:
+    #     for video in os.listdir(os.path.join(new_path, word)):
+    #         video_path = os.path.join(os.path.join(new_path, word), video)
+    #         if video_path.endswith(".mp4"):
+    #             new_video_path = video_path.replace(".mp4","-b" + ".avi")
+    #         else:
+    #             new_video_path = video_path.replace(".avi","-b" + ".avi")
+    #         video_gausian_blur(video_path, new_video_path, 35)
             
                 
 
