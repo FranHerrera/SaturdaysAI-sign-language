@@ -194,36 +194,6 @@ def video_gausian_blur(path, new_path, kernel_size):
     output.release()
 
 
-####################### Rename #######################
-def extract_name(word, count, transformation):
-    '''
-        extract_name(path, transformation)
-        
-        This function takes a path and extracts the file name, adds the transformation being done and the extension ".avi".
-        
-        Parameters
-        -------------------------------------------------------------------------------------------
-        path:            Path string
-        transformation:  String with the transformation to be performed "flip", "rotationXX", "tranlation", "resizeXX" and "blur" (XX is the angle in the case of rotation or 
-        the percentege of size change)
-        Return
-        -------------------------------------------------------------------------------------------
-        name:            The new name that the video has.
-    '''
-    # Generates an array with two positions, one for the path and the other for the video name.
-    # video_path_split = path.split("\\") # ['../1 - Dataset/Words/Sentir', 'word-sentir-001.mp4']
-    # name = video_path_split[1]
-    # name_array = name.split("-")
-    # # Add the transformation and the extension
-    # transformation = "-" + transformation + ".avi"
-    # name = name.replace(".mp4",transformation)
-    name = word + transformation + str(count) + str(randrange(9999)) + ".avi"
-    return name
-
-def new_name(word, count):
-    name = word + "_" + str(count) + "_" + str(time.time_ns()) + ".avi"
-    return name
-
 ######################## Video Augmentation ########################
 def video_augmentation(path):
     '''
