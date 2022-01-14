@@ -22,17 +22,17 @@ El objetivo de este proyecto de la 1ª Edición de AI Saturdays Online es demost
 
 1. Se ha generado un conjunto de datos a partir de videos de palabras pertenecientes al LSE.
 
-![GIF Videos](assets\gif_videos.gif)
+![GIF Videos](https://github.com/FranHerrera/SaturdaysAI-sign-language/blob/main/assets/gif_videos.gif)
 
 2. Se han generado más videos a partir de modificaciones de los videos obtenidos (flips, rotaciones y traslaciones)
 
-![GIF Videos modificados](assets\gif_videos_modificados.gif)
+![GIF Videos modificados](https://github.com/FranHerrera/SaturdaysAI-sign-language/blob/main/assets/gif_videos_modificados.gif)
 
 3. Se ha utilizado el framework [Mediapipe](https://google.github.io/mediapipe/solutions/holistic) para extraer las coordenadas de las diferentes partes del cuerpo que se utilizan para generar el gesto y almacenarlas en un dataframe
 
-![GIF Video con mediapipe](assets\gif_videos_mediapipe.gif)
+![GIF Video con mediapipe](https://github.com/FranHerrera/SaturdaysAI-sign-language/blob/main/assets/gif_videos_mediapipe.gif)
 
 4. Se ha entrenado un modelo de machine learning con el algoritmo SVC
 5. Se han obtenido los siguiente resultados
 
-![GIF Resultados](assets\gif_resultados.gif)
+![GIF Resultados](https://github.com/FranHerrera/SaturdaysAI-sign-language/blob/main/assets/gif_resultados.gif)
