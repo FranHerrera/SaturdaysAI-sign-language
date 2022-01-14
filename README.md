@@ -13,22 +13,26 @@
 
 
 
-## El `bootcamp`
+## Objetivo del proyecto
 
-Como parte de esta colaboración y en el contexto de Saturdays.AI, nuestro principal objetivo es crear un curso de iniciación a la interfaz Machine Learning, Deep Learning y Reinforcement Learning que se realizará a lo largo de 14 semanas.
+El objetivo de este proyecto de la 1ª Edición de AI Saturdays Online es demostrar que, utilizando las nuevas posibilidades que aportan tecnologías, en concreto la visión por ordenador y el aprendizaje automático, se puede democratizar el aprendizaje de la lengua de signos española (LSE) y de esta forma facilitar la inclusión de las personas que requieran de la lengua de signos para comunicarse en la sociedad.
 
-## Objetivo final
+## Implementación
+### Pasos
 
-Uno de nuestros objetivos es terminar el bootcamp con los conocimientos suficientes para ...
+1. Se ha generado un conjunto de datos a partir de videos de palabras pertenecientes al LSE.
 
-## Colección de datos
+![GIF Videos](assets\gif_videos.gif)
 
-(to define)
+2. Se han generado más videos a partir de modificaciones de los videos obtenidos (flips, rotaciones y traslaciones)
 
-## Cómo empezar
+![GIF Videos modificados](assets\gif_videos_modificados.gif)
 
-(to define)
+3. Se ha utilizado el framework [Mediapipe](https://google.github.io/mediapipe/solutions/holistic) para extraer las coordenadas de las diferentes partes del cuerpo que se utilizan para generar el gesto y almacenarlas en un dataframe
 
-## Cómo contribuir
+![GIF Video con mediapipe](assets\gif_videos_mediapipe.gif)
 
-(to define)
+4. Se ha entrenado un modelo de machine learning con el algoritmo SVC
+5. Se han obtenido los siguiente resultados
+
+![GIF Resultados](assets\gif_resultados.gif)
